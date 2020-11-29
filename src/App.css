@@ -1,0 +1,26 @@
+.text-grey {
+  color: gray;
+}
+
+.list-issue-title {
+  margin-left: 10px;
+}
+
+.list-avatar {
+  border-radius: 50%;
+  border: 2px black solid;
+}
+
+.modal-avatar {
+  width: 128px;
+  height: 128px;
+}
+
+.issue:hover {
+  background-color: #c8ced3;
+  cursor: pointer;
+}
+
+.issueModal {
+  overflow-x: scroll;
+}
