@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Container, Alert } from "react-bootstrap";
-import { ClockLoader } from "react-spinners";
+import { ScaleLoader } from "react-spinners";
 
 import PublicNavbar from "./components/PublicNavbar";
 import IssueList from "./components/IssueList";
@@ -33,7 +33,7 @@ const App = () => {
     const repo = searchInput.substring(searchInput.lastIndexOf("/") + 1);
     const withoutRepo = searchInput.substring(0, searchInput.lastIndexOf("/"));
     const owner = withoutRepo.substring(withoutRepo.lastIndexOf("/") + 1);
-    return { owner, repo };
+    return { owner, repo }; // ???
   }
 
   const handleSearchInputChange = (e) => {
@@ -48,6 +48,13 @@ const App = () => {
     if (temp.length === 2) {
       setOwner(owner);
       setRepo(repo);
+    } else if (
+      temp[0] === "https:" &&
+      temp[1] === "" &&
+      temp[2] === "github.com"
+    ) {
+      setOwner(owner);
+      setRepo(repo);
     } else {
       setErrorMessage("Wrong format of search input");
     }
@@ -55,7 +62,10 @@ const App = () => {
 
   const showDetail = (item) => {
     setShowModal(true);
-    if (selectedIssue?.number !== item.number) {
+    if (
+      selectedIssue?.number !== item.number ||
+      selectedIssue?.number === item.number
+    ) {
       setComments([]);
       setCommentPageNum(1);
       setCommentTotalPageNum(1);
@@ -86,7 +96,7 @@ const App = () => {
           const link = response.headers.get("link");
           if (link) {
             const getTotalPage = link.match(
-              /page=(\d+)&per_page=\d+; rel="last"/
+              /page=(\d+)&per_page=\d+>; rel="last"/
             );
             if (getTotalPage) {
               setCommentTotalPageNum(parseInt(getTotalPage[1]));
@@ -98,6 +108,7 @@ const App = () => {
           setErrorMessage(`FETCH COMMENTS ERROR: ${data.message}`);
           setShowModal(false);
         }
+        console.log(data);
       } catch (error) {
         setErrorMessage(`FETCH COMMENTS ERROR: ${error.message}`);
         setShowModal(false);
@@ -129,7 +140,6 @@ const App = () => {
           setErrorMessage(`FETCH ISSUES ERROR: ${data.message}`);
           setIssues([]);
         }
-        console.log(data);
       } catch (error) {
         setErrorMessage(`FETCH ISSUES ERROR: ${error.message}`);
       }
@@ -156,23 +166,36 @@ const App = () => {
           </Alert>
         )}
 
-        <PaginationBar
-          pageNum={pageNum}
-          setPageNum={setPageNum}
-          totalPageNum={totalPageNum}
-        />
+        {issues.length > 0 && !loading && (
+          <PaginationBar
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            totalPageNum={totalPageNum}
+          />
+        )}
 
         {loading ? (
-          <ClockLoader color="#f86c6b" size={100} loading={loading} />
+          <div className="loader-div d-flex flex-row justify-content-center align-items-center">
+            <ScaleLoader
+              color="#3F3BA7"
+              height={100}
+              width={20}
+              radius={50}
+              margin={5}
+              loading={loading}
+            />
+          </div>
         ) : (
           <IssueList itemList={issues} showDetail={showDetail} />
         )}
 
-        <PaginationBar
-          pageNum={pageNum}
-          setPageNum={setPageNum}
-          totalPageNum={totalPageNum}
-        />
+        {issues.length > 0 && !loading && (
+          <PaginationBar
+            pageNum={pageNum}
+            setPageNum={setPageNum}
+            totalPageNum={totalPageNum}
+          />
+        )}
 
         <IssueModal
           issue={selectedIssue}

@@ -4,27 +4,6 @@ import ReactMarkdown from "react-markdown";
 import Moment from "react-moment";
 import { MoonLoader } from "react-spinners";
 
-const Comments = ({ user, body, created_at }) => {
-  return (
-    <Media as="li" className="mb-3">
-      <img
-        src={user.avatar_url}
-        alt="User Avatar"
-        className="modal-avatar mr-3"
-      />
-      <Media.Body class="text-left">
-        <div>
-          <span className="text-grey mr-2">@{user.login}</span>
-          <span className="text-grey">
-            commented <Moment fromNow>{created_at}</Moment>
-          </span>
-        </div>
-        <ReactMarkdown source={body} />
-      </Media.Body>
-    </Media>
-  );
-};
-
 const IssueModal = ({
   issue,
   comments,
@@ -41,8 +20,9 @@ const IssueModal = ({
         show={showModal}
         onHide={() => setShowModal(false)}
         aria-labelledby="issue-detail-modal"
+        animation
       >
-        <Modal.Header closeButton>
+        <Modal.Header closeButton className="modal-title">
           <Modal.Title id="issue-detail-modal">
             <span className="mr-2 badge badge-info">#{issue.number}</span>
             <span>{issue.title}</span>
@@ -52,7 +32,7 @@ const IssueModal = ({
         <Modal.Body>
           <ReactMarkdown source={issue.body} className="issueModal" />
 
-          <hr />
+          <hr className="horizontal-line" />
 
           <h4>Comments:</h4>
           <ul className="list-unstyled">
@@ -65,7 +45,7 @@ const IssueModal = ({
             )}
           </ul>
 
-          <div className="d-flex flex-row justify-content-center align-items-center">
+          <div className="d-flex justify-content-center">
             {loadingComments ? (
               <MoonLoader color="#f86c6b" size={75} loading={loadingComments} />
             ) : (
@@ -85,6 +65,31 @@ const IssueModal = ({
         </Modal.Body>
       </Modal>
     )
+  );
+};
+
+const Comments = ({ user, body, created_at }) => {
+  return (
+    <Media as="li" className="mb-3 mt-3 comment">
+      <Media.Body className="text-left">
+        <div className="mb-2 comment-header">
+          <span>
+            <img
+              src={user.avatar_url}
+              alt="User Avatar"
+              className="modal-avatar mr-2"
+            />
+          </span>
+          <span className="comment-user-name mr-2">@{user.login}</span>
+          <span className="text-grey">
+            commented <Moment fromNow>{created_at}</Moment>
+          </span>
+        </div>
+        <div className="comment-content">
+          <ReactMarkdown source={body} />
+        </div>
+      </Media.Body>
+    </Media>
   );
 };
 

@@ -12,8 +12,9 @@
 }
 
 .modal-avatar {
-  width: 128px;
-  height: 128px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
 }
 
 .issue:hover {
@@ -23,4 +24,38 @@
 
 .issueModal {
   overflow-x: scroll;
+}
+
+.comment {
+  border: 1px solid #b8b8b8;
+  border-radius: 10px;
+  overflow-x: scroll;
+}
+
+.comment-header {
+  padding: 5px;
+  padding-top: 10px;
+  padding-left: 10px;
+}
+
+.comment-content {
+  background-color: #f2f2f2;
+  padding: 10px;
+}
+
+.comment-user-name {
+  font-weight: bolder;
+  color: #34495e;
+}
+
+.horizontal-line {
+  border: 1px solid black;
+}
+
+.loader-div {
+  height: 500px;
+}
+
+.modal-title {
+  background-color: #bdc3c7;
 }
